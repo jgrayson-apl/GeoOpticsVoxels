@@ -1,0 +1,14 @@
+{
+  "title": "GeoOptics - radio occultation weather data",
+  "description": "",
+  "portalUrl": "https://www.arcgis.com",
+  "oauthappid": "VmebHbQXcDv0zuin",
+  "apiKey": null,
+  "group": "",
+  "webmap": "",
+  "webscene": "a75e9f6c502e4cbabfb74c30a03801d7",
+  "container": "view-container",
+  "shareable": [
+    "interactive"
+  ]
+}

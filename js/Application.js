@@ -139,11 +139,11 @@ class Application extends AppBase {
         slideTile.setAttribute('heading', slide.title.text);
         slideTile.setAttribute('description', " "); // blank space critical to maintain vertical layout //
         slideTile.setAttribute('value', slideIdx);
-
-        if (slideIdx === 0) {
-          slideTile.toggleAttribute('checked', true);
-          slide.applyTo(view);
-        }
+        slideTile.toggleAttribute('checked', (slideIdx === 0));
+        // if (slideIdx === 0) {
+        //   slideTile.toggleAttribute('checked', true);
+        //   slide.applyTo(view);
+        // }
 
         const slideThumb = templateNode.querySelector('.slide-thumb');
         slideThumb.setAttribute('src', slide.thumbnail.url);

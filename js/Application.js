@@ -74,11 +74,14 @@ class Application extends AppBase {
   configView(view) {
     return new Promise((resolve, reject) => {
       if (view) {
-        require(['esri/widgets/Home'], (Home) => {
+        require([
+          'esri/widgets/Home',
+          'esri/widgets/Legend'
+        ], (Home, Legend) => {
 
-          if (!Boolean(this.interactive)) {
-            view.container.classList.add('no-interaction');
-          }
+          // if (!Boolean(this.interactive)) {
+          //   view.container.classList.add('no-interaction');
+          // }
 
           //
           // CONFIGURE VIEW SPECIFIC STUFF HERE //
@@ -90,6 +93,10 @@ class Application extends AppBase {
           // HOME //
           const home = new Home({view});
           view.ui.add(home, {position: 'top-left', index: 0});
+
+          // LEGEND //
+          const legend = new Legend({view});
+          view.ui.add(legend, {position: 'top-right', index: 0});
 
           // VIEW UPDATING //
           this.disableViewUpdating = true;
@@ -107,6 +114,18 @@ class Application extends AppBase {
 
   /**
    *
+   * @returns {Promise<>}
+   */
+  /*loadProjectionEngine() {
+    return new Promise((resolve, reject) => {
+      require(["esri/geometry/projection"], (projection) => {
+        projection.load().then(resolve).catch(reject);
+      });
+    });
+  }*/
+
+  /**
+   *
    * @param portal
    * @param group
    * @param map
@@ -118,7 +137,7 @@ class Application extends AppBase {
       // VIEW READY //
       this.configView(view).then(() => {
 
-        //this.initializeViewSpinTools({view});
+        this.initializeViewSpinTools({view});
         this.initializeSlideTiles({view}).then(resolve).catch(reject);
 
       }).catch(reject);
@@ -140,10 +159,6 @@ class Application extends AppBase {
         slideTile.setAttribute('description', " "); // blank space critical to maintain vertical layout //
         slideTile.setAttribute('value', slideIdx);
         slideTile.toggleAttribute('checked', (slideIdx === 0));
-        // if (slideIdx === 0) {
-        //   slideTile.toggleAttribute('checked', true);
-        //   slide.applyTo(view);
-        // }
 
         const slideThumb = templateNode.querySelector('.slide-thumb');
         slideThumb.setAttribute('src', slide.thumbnail.url);
@@ -158,7 +173,13 @@ class Application extends AppBase {
       const slideTiles = slides.map(createSlideTile);
 
       const slideTileContainer = document.getElementById('slide-tile-container');
-      slideTileContainer.append(...slideTiles);
+      slideTileContainer.replaceChildren(...slideTiles);
+
+      setTimeout(() => {
+        slideTileContainer.querySelectorAll('calcite-tile-select').forEach(tileSelect => {
+          this.setShadowElementStyle(tileSelect, '.container.width-full', 'flex-direction', 'column');
+        });
+      }, 500);
 
       const setActiveSlide = (slideIdx) => {
         const nextSlideItem = slideTileContainer.querySelector(`calcite-tile-select[value="${ slideIdx }"]`);
@@ -192,6 +213,7 @@ class Application extends AppBase {
           updateProgress.value = 1.0;
           updateHandle = setInterval(_nextSlide, 10000);
           progressHandle = setInterval(_updateProgress, 10);
+          view.focus();
         } else {
           slidesAction.setAttribute('icon', 'play-f');
           updateProgress.value = 0.0;
@@ -217,13 +239,10 @@ class Application extends AppBase {
     ], (watchUtils, promiseUtils) => {
 
       const viewSpinPanel = document.getElementById("view-spin-panel");
-      view.ui.add(viewSpinPanel, 'top-right');
+      view.ui.add(viewSpinPanel);
 
-      /*const viewSpinBtn = document.getElementById('view-spin-btn');
-       viewSpinBtn.addEventListener('click', () => {
-       viewSpinPanel.classList.toggle('hide');
-       this.enableSpin(viewSpinBtn.classList.toggle('selected'));
-       });*/
+      // DISPLAY SPIN TOOLS //
+      viewSpinPanel.removeAttribute('hidden');
 
       let spin_direction = "none";
       let spin_step = 0.05;

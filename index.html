@@ -18,8 +18,8 @@
     <link href="https://js.arcgis.com/calcite-components/1.0.0-beta.80/calcite.css" rel="stylesheet"/>
     
     <!-- ArcGIS API for JavaScript-->
-    <link href="https://js.arcgis.com/4.23/@arcgis/core/assets/esri/themes/dark/main.css" rel="stylesheet"/>
-    <script src="https://js.arcgis.com/4.23/"></script>
+    <link href="https://js.arcgis.com/next/@arcgis/core/assets/esri/themes/dark/main.css" rel="stylesheet"/>
+    <script src="https://js.arcgis.com/next/"></script>
     
     <!-- APPLICATION -->
     <link rel="stylesheet" type="text/css" href="./css/app-base.css"/>
@@ -39,7 +39,6 @@
           <apl-sign-in id="sign-in" hidden></apl-sign-in>
           
           <calcite-action-bar class="content-row" expand-disabled="true">
-            
             <calcite-action id="app-share-action" appearance="clear" scale="m" title="share current options..." text="share current options" icon="link" hidden></calcite-action>
             <calcite-action id="app-details-action" appearance="clear" scale="m" title="app details..." text="app details" icon="information"></calcite-action>
           </calcite-action-bar>
@@ -58,12 +57,10 @@
       
       <!-- LEFT -->
       <calcite-shell-panel slot="primary-panel" position="start" width-scale="s" collapsed="false">
-        <calcite-panel heading="Atmospheric Temperature" summary="in degrees Kelvin">
+        <calcite-panel heading="Atmospheric Temperature" summary="June 06, 2019">
           
           <div class="content-col margin-s">
-            <div class="content-center margin-s">
-              <calcite-action id="slides-action" appearanceX="clear" scale="l" title="view all slides..." icon="play-f"></calcite-action>
-            </div>
+            <calcite-action id="slides-action" appearance="solid" alignment="center" scale="l" title="view all slides..." icon="play-f"></calcite-action>
             <calcite-progress id="update-progress" type="determinate" value="0.0"></calcite-progress>
           </div>
           
@@ -112,15 +109,16 @@
         name="slide-tile"
         input-enabled="true"
         input-alignment="end"
-        type="radio">
+        type="radio"
+        width="full">
         <img class="slide-thumb" height="80">
       </calcite-tile-select>
     </template>
     
     <!-- SPIN PANEL -->
-    <div id="view-spin-panel" class="panel-content content-row panel-no-padding" hidden>
+    <div id="view-spin-panel" class="panel-content panel-no-padding content-row" hidden>
       <calcite-action id="spin-left-btn" icon="arrow-bold-left" class="spin-btn" title="spin left"></calcite-action>
-      <div id="spin-heading-label" class="spin-label text-center text-theme font-size-3" title="heading"></div>
+      <div id="spin-heading-label" class="spin-label" title="heading"></div>
       <calcite-action id="spin-right-btn" icon="arrow-bold-right" class="spin-btn" title="spin right"></calcite-action>
     </div>
   

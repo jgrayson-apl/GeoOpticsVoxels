@@ -116,13 +116,14 @@ class Application extends AppBase {
    *
    * @returns {Promise<>}
    */
+
   /*loadProjectionEngine() {
-    return new Promise((resolve, reject) => {
-      require(["esri/geometry/projection"], (projection) => {
-        projection.load().then(resolve).catch(reject);
-      });
-    });
-  }*/
+   return new Promise((resolve, reject) => {
+   require(["esri/geometry/projection"], (projection) => {
+   projection.load().then(resolve).catch(reject);
+   });
+   });
+   }*/
 
   /**
    *
@@ -139,6 +140,8 @@ class Application extends AppBase {
 
         this.initializeViewSpinTools({view});
         this.initializeSlideTiles({view}).then(resolve).catch(reject);
+
+        //this.initializeVoxelFilters({view});
 
       }).catch(reject);
     });
@@ -331,6 +334,56 @@ class Application extends AppBase {
     });
   }
 
+  /**
+   *
+   * To change the render mode you change vxlLayer.style.renderMode.
+   *
+   * The only 2 possibilities are “volume” and “surfaces”.
+   *
+   * The “surfaces” render mode includes isosurfaces and dynamic aka unlocked sections
+   * and “volume” means drawing the full volume, what you currently call “Full Dataset”.
+   *
+   * Slices apply to both render modes.
+   *
+   * Static or locked sections draw in both render modes but you can only see them in
+   * “volume” rendering if the volume is sliced to reveal the static section.
+   *
+   *
+   * I don’t think your sample app uses different variables but if your dataset has
+   * multiple variables that would be 1 way to accomplish some of the different rendering
+   * that you want to highlight.  Each variable has its own “style”, which is like a renderer,
+   * so you could have 1 variable show just isosurfaces in “surfaces” mode and another which
+   * has both dynamic sections and isosurfaces.
+   *
+   * The variable can be changed using vxlLayer.style.currentVariableId.
+   *
+   * vxlLayer.variables exposes a collection of variables, each of which has an Id
+   * that you can set as currentVariableId (i.e. they are IDs and not indices).
+   *
+   * We also let you change the set of slices or dynamicSections but that could be a little
+   * more involved.  I can go over it with you if you want though.  We don’t currently have
+   * JS support for any of the following though:
+   *
+   * 1)  changing the set of isosurfaces in any way
+   * 2)  changing the color or opacity functions used when rendering the volume or sections
+   *
+   *
+   * @param view
+   */
+  initializeVoxelFilters({view}) {
+
+    view.map.layers.forEach(voxelLayer => {
+      voxelLayer?.load().then(() => {
+        voxelLayer.watch('visible', visible => {
+          if (visible) {
+            // “volume” and “surfaces” //
+            console.info(voxelLayer.title, voxelLayer.style,  voxelLayer.style.renderMode, voxelLayer.style.currentVariableId);
+          }
+        });
+      });
+    });
+
+  }
 }
 
 export default new Application();
